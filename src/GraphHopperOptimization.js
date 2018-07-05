@@ -6,10 +6,10 @@ var ghUtil = new GHUtil();
 
 GraphHopperOptimization = function (args) {
     this.points = [];
-    this.host = "https://graphhopper.com/api/1";
+    this.host = "https://us-central1-llra-180306.cloudfunctions.net";
     this.key = args.key;
     this.profile = args.profile;
-    this.basePath = '/vrp';
+    this.basePath = '/pieOptimization';
     this.waitInMillis = 1000;
     this.timeout = 10000;
     this.postTimeout = 15000;
@@ -88,7 +88,7 @@ GraphHopperOptimization.prototype.doRawRequest = function (jsonInput, reqArgs) {
         if (reqArgs)
             args = ghUtil.copyProperties(reqArgs, args);
 
-        var url = args.host + args.basePath + "/optimize?key=" + args.key;
+        var url = args.host + args.basePath;
 
         request
                 .post(url)
@@ -100,7 +100,7 @@ GraphHopperOptimization.prototype.doRawRequest = function (jsonInput, reqArgs) {
                     if (err || !res.ok) {
                         reject(ghUtil.extractError(res, url));
                     } else if (res) {
-                        var solutionUrl = args.host + args.basePath + "/solution/" + res.body.job_id + "?key=" + args.key;
+                        var solutionUrl = args.host + args.basePath + "?s=" + res.body.solution_id;
                         var timerRet;
 
                         var pollTrigger = function () {
